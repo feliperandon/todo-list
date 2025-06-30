@@ -1,3 +1,4 @@
+import TodoItem from "./components/TodoItem";
 import type { TodosType } from "./types/todosType";
 
 import { useState } from "react";
@@ -52,7 +53,7 @@ const App = () => {
           className="border rounded px-2 py-1"
         />
         <button
-          className="bg-blue-500 text-white px-4 py-1 rounded"
+          className="bg-blue-500 text-white px-4 py-1 rounded cursor-pointer"
           type="submit"
         >
           Add
@@ -61,27 +62,12 @@ const App = () => {
 
       <ul className="mt-4">
         {todo.map((task) => (
-          <div className="flex gap-2.5 items-center">
-            <li key={task.id} className="py-1">
-              <span
-                className={task.completed ? "line-through text-gray-400" : ""}
-              >
-                {task.title}
-              </span>
-            </li>
-            <input
-              type="checkbox"
-              onChange={() => toggleCompleted(task.id)}
-              checked={task.completed}
-            />
-            <button
-              type="button"
-              onClick={() => deleteTodo(task.id)}
-              className="cursor-pointer"
-            >
-              Remove
-            </button>
-          </div>
+          <TodoItem
+            key={task.id}
+            task={task}
+            toggleCompleted={toggleCompleted}
+            deleteTodo={deleteTodo}
+          />
         ))}
       </ul>
     </div>
