@@ -1,11 +1,18 @@
 import TodoItem from "./components/TodoItem";
 import type { TodosType } from "./types/todosType";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const App = () => {
   const [todo, setTodo] = useState<TodosType[]>([]);
   const [title, setTitle] = useState("");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("todolist");
+    if (saved) {
+      setTodo(JSON.parse(saved));
+    }
+  }, []);
 
   const addTodo = (title: string) => {
     const newTodo: TodosType = {
@@ -16,6 +23,17 @@ const App = () => {
 
     setTodo((prev) => [...prev, newTodo]);
   };
+
+  const isFirstLoad = useRef(true);
+
+  useEffect(() => {
+    if (isFirstLoad.current) {
+      isFirstLoad.current = false;
+      return;
+    }
+
+    localStorage.setItem("todolist", JSON.stringify(todo));
+  }, [todo]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +52,7 @@ const App = () => {
       }
       return todos;
     });
-    console.log(comTodos);
+
     return setTodo(comTodos);
   };
 
